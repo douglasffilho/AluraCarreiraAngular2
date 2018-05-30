@@ -13,7 +13,7 @@ class DateHelper {
     }
 
     static stringToDate(text) {
-        if (!/d{4}-d{2}-d{2}/.test(text))
+        if (!/\d{4}-\d{2}-\d{2}/.test(text))
             throw new Error("Formato de data deve ser yyyy-mm-dd");
         else {
             return new Date(...text.split('-').map((field, index) => field - index % 2));
