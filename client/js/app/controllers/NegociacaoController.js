@@ -38,4 +38,11 @@ class NegociacaoController {
         this._inputData.focus();
     }
 
+    limpaNegociacoes() {
+        this._listaNegociacoes.limpa();
+        this._message.text = 'Negociações apagadas com exito';
+        this._messageView.update(this._message);
+        this._negociacoesView.update(this._listaNegociacoes);
+    }
+
 }

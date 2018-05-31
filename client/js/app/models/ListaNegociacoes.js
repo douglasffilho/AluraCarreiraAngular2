@@ -12,4 +12,8 @@ class ListaNegociacoes {
         return [].concat(this._negociacoes);
     }
 
+    limpa() {
+        this._negociacoes = [];
+    }
+
 }
