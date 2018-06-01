@@ -7,7 +7,7 @@ class ProxyFactory {
                 if(properties.includes(property) && ProxyFactory._isFunction(target[property])) {
                     return function() {
                         Reflect.apply(target[property], target, arguments);
-                        return action(target);
+                        action(target);
                     }
                 }
 
@@ -15,6 +15,7 @@ class ProxyFactory {
             },
             set(target, property, value, receiver) {
                 if(properties.includes(property)) {
+                    target[property] = value;
                     action(target);
                 }
                 
