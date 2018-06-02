@@ -16,12 +16,14 @@ class NegociacaoController {
             new Message(),
             new MessageView($('#messageView')),
             'text');
+
+        this._negociacoesService = new NegociacoesService();
     }
 
     adiciona(event) {
         event.preventDefault();
         this._listaNegociacoes.adiciona(this._criaNegociacao());
-        this._message.text = 'Negociacao adicionada com exito';
+        this._message.text = 'Negociacao cadastrada com exito';
         this._limpaFormulario();
     }
 
@@ -46,4 +48,16 @@ class NegociacaoController {
         this._message.text = 'Negociações apagadas com exito';
     }
 
+    importaNegociacoes() {
+        console.log('importando negociações');
+
+        this._negociacoesService.obterNegociacoesDaSemana((error, negociacoes) => {
+            if(error) {
+                this._message.text = error;
+                return;
+            }
+            negociacoes.forEach(n => this._listaNegociacoes.adiciona(n));
+            this._message.text = "Negociações importadas com sucessso.";
+        });
+    }
 }
