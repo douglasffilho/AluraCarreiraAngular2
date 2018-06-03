@@ -2,14 +2,15 @@ class NegociacoesService {
 
     constructor() {
         this._urlSemana = 'negociacoes/semana';
+        this._urlSemanaPassada = 'negociacoes/anterior'
+        this._urlSemanaRetrasada = 'negociacoes/retrasada';
         this._urlCadastrarNova = 'negociacoes';
     }
 
-    obterNegociacoesDaSemana(callback) {
+    _obterNegociacoes(url, callback) {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', this._urlSemana);
+        xhr.open('GET', url);
 
-        
         xhr.onreadystatechange = () => {
             if(xhr.readyState == 4) {
                 let errorMessage = '';
@@ -28,7 +29,29 @@ class NegociacoesService {
                 callback(errorMessage, negociacoes);
             }
         };
+
         xhr.send();
+    }
+
+    obterNegociacoes(semana, callback) {
+        if(semana == 'atual')
+            return this._obterNegociacoesDaSemana(callback);
+        else if(semana == 'passada')
+            return this._obterNegociacoesDaSemanaPassada(callback);
+        else if(semana == 'retrasada')
+            return this._obterNegociacoesDaSemanaRetrasada(callback);
+    }
+
+    _obterNegociacoesDaSemana(callback) {
+        return this._obterNegociacoes(this._urlSemana, callback);
+    }
+
+    _obterNegociacoesDaSemanaPassada(callback) {
+        return this._obterNegociacoes(this._urlSemanaPassada, callback);
+    }
+
+    _obterNegociacoesDaSemanaRetrasada(callback) {
+        return this._obterNegociacoes(this._urlSemanaRetrasada, callback);
     }
 
     cadastrarNovaNegociacao(negociacao, callback) {
@@ -42,8 +65,7 @@ class NegociacoesService {
                 let negociacaoCadastrada = null;
                 
                 if(xhr.status == 200) {
-                    console.log(responseText);
-                    // negociacaoCadastrada = JSON.parse(xhr.responseText);
+                    negociacaoCadastrada = negociacao;
                 } else {
                     errorMessage = "Não foi possível acessar a API";
                     console.log(errorMessage);
@@ -54,7 +76,9 @@ class NegociacoesService {
             }
         };
 
-        let negociacaoAsString = JSON.stringify(negociacao);
+        let negociacaoAsString = `{"data":"${negociacao.data}",
+                                "quantidade":${negociacao.quantidade},
+                                "valor":${negociacao.valor}}`;
 
         xhr.send(negociacaoAsString);
     }

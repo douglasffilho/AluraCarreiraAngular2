@@ -39,7 +39,7 @@ class CadastraNegociacaoController {
                 this._message.text = error;
                 return;
             }
-            console.log(negociacaoCadastrada);
+            this._message.text = 'Negociação cadastrada com sucesso';
         });
     }
 

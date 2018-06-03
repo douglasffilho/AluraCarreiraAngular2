@@ -17,6 +17,6 @@ class ListaNegociacoes {
     }
 
     get volume() {
-        return this._negociacoes.reduce((total, negociacao) => total + negociacao.valor, 0.0);
+        return this._negociacoes.reduce((total, negociacao) => (1 * total) + (1 * negociacao.volume), 0.0);
     }
 }

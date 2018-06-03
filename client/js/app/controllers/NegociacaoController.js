@@ -48,10 +48,9 @@ class NegociacaoController {
         this._message.text = 'Negociações apagadas com exito';
     }
 
-    importaNegociacoes() {
+    _importaNegociacoes(semana) {
         console.log('importando negociações');
-
-        this._negociacoesService.obterNegociacoesDaSemana((error, negociacoes) => {
+        this._negociacoesService.obterNegociacoes(semana, (error, negociacoes) => {
             if(error) {
                 this._message.text = error;
                 return;
@@ -59,5 +58,17 @@ class NegociacaoController {
             negociacoes.forEach(n => this._listaNegociacoes.adiciona(n));
             this._message.text = "Negociações importadas com sucessso.";
         });
+    }
+
+    importaNegociacoesSemana() {
+        return this._importaNegociacoes('atual');
+    }
+
+    importaNegociacoesSemanaPassada() {
+        return this._importaNegociacoes('passada');
+    }
+
+    importaNegociacoesSemanaRetrasada() {
+        return this._importaNegociacoes('retrasada');
     }
 }
