@@ -48,27 +48,29 @@ class NegociacaoController {
         this._message.text = 'Negociações apagadas com exito';
     }
 
-    _importaNegociacoes(semana) {
+    importaNegociacoes() {
         console.log('importando negociações');
-        this._negociacoesService.obterNegociacoes(semana, (error, negociacoes) => {
-            if(error) {
-                this._message.text = error;
-                return;
-            }
-            negociacoes.forEach(n => this._listaNegociacoes.adiciona(n));
-            this._message.text = "Negociações importadas com sucessso.";
-        });
+        
+        this._negociacoesService.obterNegociacoesDaSemana()
+            .then(negociacoes => {
+                negociacoes.forEach(n => this._listaNegociacoes.adiciona(n));
+                this._message.text = 'Negociações da semana obtidas com sucesso';
+            })
+            .catch(error => this._message.text = error);
+
+        this._negociacoesService.obterNegociacoesDaSemanaPassada()
+            .then(negociacoes => {
+                negociacoes.forEach(n => this._listaNegociacoes.adiciona(n));
+                this._message.text = 'Negociações da semana passada obtidas com sucesso';
+            })
+            .catch(error => this._message.text = error);
+
+        this._negociacoesService.obterNegociacoesDaSemanaRetrasada()
+            .then(negociacoes => {
+                negociacoes.forEach(n => this._listaNegociacoes.adiciona(n));
+                this._message.text = 'Negociações da semana retrasada obtidas com sucesso';
+            })
+            .catch(error => this._message.text = error);
     }
 
-    importaNegociacoesSemana() {
-        return this._importaNegociacoes('atual');
-    }
-
-    importaNegociacoesSemanaPassada() {
-        return this._importaNegociacoes('passada');
-    }
-
-    importaNegociacoesSemanaRetrasada() {
-        return this._importaNegociacoes('retrasada');
-    }
 }
