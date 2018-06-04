@@ -19,7 +19,7 @@ class NegociacoesService {
                         resolve(JSON.parse(xhr.responseText)
                         .map(obj => new Negociacao(new Date(obj.data), obj.quantidade, obj.valor)));
                     } else {
-                        errorMessage = "Não foi possível obter negociações da semana";
+                        let errorMessage = "Não foi possível obter negociações da semana";
                         console.log(errorMessage);
                         console.log(xhr.responseText);
                         reject(errorMessage);
@@ -43,7 +43,7 @@ class NegociacoesService {
                         resolve(JSON.parse(xhr.responseText)
                         .map(obj => new Negociacao(new Date(obj.data), obj.quantidade, obj.valor)));
                     } else {
-                        errorMessage = "Não foi possível obter negociações da semana passada";
+                        let errorMessage = "Não foi possível obter negociações da semana passada";
                         console.log(errorMessage);
                         console.log(xhr.responseText);
                         reject(errorMessage);
@@ -67,7 +67,7 @@ class NegociacoesService {
                         resolve(JSON.parse(xhr.responseText)
                         .map(obj => new Negociacao(new Date(obj.data), obj.quantidade, obj.valor)));
                     } else {
-                        errorMessage = "Não foi possível obter negociações da semana retrasada";
+                        let errorMessage = "Não foi possível obter negociações da semana retrasada";
                         console.log(errorMessage);
                         console.log(xhr.responseText);
                         reject(errorMessage);
@@ -79,33 +79,32 @@ class NegociacoesService {
         });
     }
 
-    cadastrarNovaNegociacao(negociacao, callback) {
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', this._urlCadastrarNova);
-        xhr.setRequestHeader('content-type', 'application/json');
-        
-        xhr.onreadystatechange = () => {
-            if(xhr.readyState == 4) {
-                let errorMessage = '';
-                let negociacaoCadastrada = null;
-                
-                if(xhr.status == 200) {
-                    negociacaoCadastrada = negociacao;
-                } else {
-                    errorMessage = "Não foi possível acessar a API";
-                    console.log(errorMessage);
-                    console.log(xhr.responseText);
+    cadastrarNovaNegociacao(negociacao) {
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', this._urlCadastrarNova);
+            xhr.setRequestHeader('content-type', 'application/json');
+            
+            xhr.onreadystatechange = () => {
+                if(xhr.readyState == 4) {
+                    if(xhr.status == 200) {
+                        resolve(negociacao);
+                    } else {
+                        let errorMessage = "Não foi possível acessar a API";
+                        console.log(errorMessage);
+                        console.log(xhr.responseText);
+
+                        reject(errorMessage);
+                    }
                 }
+            };
 
-                callback(errorMessage, negociacaoCadastrada);
-            }
-        };
+            let negociacaoAsString = `{"data":"${negociacao.data}",
+                                    "quantidade":${negociacao.quantidade},
+                                    "valor":${negociacao.valor}}`;
 
-        let negociacaoAsString = `{"data":"${negociacao.data}",
-                                "quantidade":${negociacao.quantidade},
-                                "valor":${negociacao.valor}}`;
-
-        xhr.send(negociacaoAsString);
+            xhr.send(negociacaoAsString);
+        });
     }
 
 }

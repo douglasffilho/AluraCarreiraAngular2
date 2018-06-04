@@ -34,13 +34,12 @@ class CadastraNegociacaoController {
         event.preventDefault();
         
         let negociacao = this._criaNegociacao();
-        this._negociacoesService.cadastrarNovaNegociacao(negociacao, (error, negociacaoCadastrada) => {
-            if(error) {
-                this._message.text = error;
-                return;
-            }
-            this._message.text = 'Negociação cadastrada com sucesso';
-        });
+        this._negociacoesService.cadastrarNovaNegociacao(negociacao)
+            .then(negociacaoCadastrada => {
+                console.log(negociacaoCadastrada);
+                this._message.text = 'Negociação cadastrada com sucesso';
+            })
+            .catch(error => this._message.text = error);
     }
 
 }
